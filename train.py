@@ -117,7 +117,9 @@ if __name__ == '__main__':
     kwargs = {'num_workers': 4, 'pin_memory': True}
     
     transform = DuplicatedCompose([
-        transforms.RandomRotation(20),
+        # torchvision 0.5 has a bug in RandomRotation() in the fill argument probably due to incompatible Pillow version.
+        # https://stackoverflow.com/questions/60205829/pytorch-transforms-randomrotation-does-not-work-on-google-colab
+        transforms.RandomRotation(20, fill=(0,)),
         transforms.RandomResizedCrop(28, scale=(0.9, 1.1), ratio=(0.9, 1.1), interpolation=2),
         transforms.ToTensor(),
         transforms.Normalize((0.1307,), (0.3081,))])
